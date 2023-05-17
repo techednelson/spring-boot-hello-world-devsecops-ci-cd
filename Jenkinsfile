@@ -27,5 +27,13 @@ pipeline {
                 }
             }
         }
+        stage('Kubernetes Deployment - DEV') {
+            steps {
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                  sh "sed -i 's#replace#webtechnelson/devsecops-application:${GIT_COMMIT}#g' k8-deployment-service.yml"
+                  sh "kubectl apply -f k8-deployment-service.yml"
+                }
+            }
+        }
     }
 }
